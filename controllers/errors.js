@@ -22,3 +22,6 @@ exports.passportErrorhandler = done => err => {
   }
   return done(err);
 };
+
+exports.notAuthenticatedErrorHandler = res =>
+  res.status(401).send({ error: "NOT_AUTHENTICATED" });

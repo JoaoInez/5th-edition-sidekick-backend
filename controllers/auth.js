@@ -48,5 +48,5 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res) => {
   req.logout();
-  res.status(204).send();
+  return res.status(204).send();
 };
