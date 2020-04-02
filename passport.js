@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { findUserByEmail, findUserById } = require("./data/user");
-const { reject, passportErrorhandler } = require("./controllers/errors");
+const { reject, passportError } = require("./utils/errors");
 
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
@@ -26,7 +26,7 @@ passport.use(
 
         return done(null, user);
       })
-      .catch(passportErrorhandler(done));
+      .catch(passportError(done));
   })
 );
 

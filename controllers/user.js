@@ -1,23 +1,14 @@
 const R = require("ramda");
-const { notAuthenticatedErrorHandler } = require("./errors");
+const { createCharacter, getCharactersIds } = require("../data/user");
+const { isAuthenticated } = require("../utils/helpers");
+const { error } = require("../utils/errors");
 
-exports.createCharacter = (req, res) => {
-  if (req.isAuthenticated()) {
-    const { user } = req;
-    user.characters.push({});
-    user.save();
-    return res.status(201).send(R.last(user.characters));
-  } else {
-    return notAuthenticatedErrorHandler(res);
-  }
-};
+exports.createCharacter = isAuthenticated(({ res, user }) => {
+  createCharacter(user).catch(error(res));
+  res.status(201).send(R.last(user.characters));
+});
 
-exports.getUserCharacters = (req, res) => {
-  if (req.isAuthenticated()) {
-    const { user } = req;
-    const characters = user.characters.map(char => char.id);
-    res.send(characters);
-  } else {
-    return notAuthenticatedErrorHandler(res);
-  }
-};
+exports.getCharacters = isAuthenticated(({ res, user }) => {
+  const characters = getCharactersIds(user);
+  res.send(characters);
+});

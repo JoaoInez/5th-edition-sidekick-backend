@@ -8,3 +8,10 @@ exports.createUser = (email, password) => {
   const user = new User({ email, password });
   return user.save();
 };
+
+exports.createCharacter = user => {
+  user.characters.push({});
+  return user.save();
+};
+
+exports.getCharactersIds = user => user.characters.map(char => char.id);

@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const { createCharacter, getUserCharacters } = require("../controllers/user");
+const { createCharacter, getCharacters } = require("../controllers/user");
 
 router.post("/character", createCharacter);
-router.get("/character", getUserCharacters);
+router.get("/character", getCharacters);
 
 module.exports = router;

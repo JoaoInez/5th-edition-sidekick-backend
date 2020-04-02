@@ -2,7 +2,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const R = require("ramda");
 const { createUser, findUserByEmail } = require("../data/user");
-const { reject, errorHandler } = require("./errors");
+const { reject, authError } = require("../utils/errors");
 
 exports.signup = (req, res, next) => {
   const email = R.path(["body", "email"])(req);
@@ -23,19 +23,19 @@ exports.signup = (req, res, next) => {
         return res.status(201).send();
       });
     })
-    .catch(errorHandler(res, next));
+    .catch(authError(res, next));
 };
 
 exports.login = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (info) {
-      return errorHandler(res, next)(info);
+      return authError(res, next)(info);
     }
     if (err) {
       return next(err);
     }
     if (!user) {
-      return errorHandler({ status: 400, error: "INVALID_CREDENTIALS" });
+      return authError({ status: 400, error: "INVALID_CREDENTIALS" });
     }
     req.logIn(user, err => {
       if (err) {
@@ -48,5 +48,5 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res) => {
   req.logout();
-  return res.status(204).send();
+  res.status(204).send();
 };
