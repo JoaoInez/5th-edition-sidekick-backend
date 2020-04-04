@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { reject } = require("../utils/errors");
+const { reject } = require("../utils/errorHandler");
 
 const omitId = (doc, ret, options) => {
   delete ret._id;
@@ -31,13 +31,13 @@ exports.updateCharacter = (userId, id, character) =>
         transform: omitId
       })
     )
-    .catch(err => reject(null, err));
+    .catch(reject);
 
 exports.deleteCharacter = (user, id) => {
   const character = user.characters.id(id);
 
   if (!character) {
-    return reject(null, { error: "INTERNAl_SERVER_ERROR" });
+    return reject(500);
   }
   character.remove();
   return user.save();

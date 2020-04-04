@@ -1,10 +1,7 @@
-const { notAuthenticatedError } = require("./errors");
-
-exports.isAuthenticated = f => (req, res) => {
+exports.isAuthenticated = f => (req, res, next) => {
   if (req.isAuthenticated()) {
     const { user } = req;
-    f({ req, res, user });
-  } else {
-    notAuthenticatedError(res);
+    return f(user, req, res, next);
   }
+  return next(401);
 };

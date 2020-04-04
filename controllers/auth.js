@@ -2,19 +2,26 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const R = require("ramda");
 const { createUser, findUserByEmail } = require("../data/user");
-const { reject, authError } = require("../utils/errors");
+const { reject } = require("../utils/errorHandler");
 
 exports.signup = (req, res, next) => {
-  const email = R.path(["body", "email"])(req);
+  const { email, password, username } = R.compose(
+    R.pickAll(["username", "email", "password"]),
+    R.prop("body")
+  )(req);
+
+  if (!email || !password || !username) {
+    return next(400);
+  }
 
   findUserByEmail(email)
     .then(user => {
       if (user) {
-        return reject(400, "USER_ALREADY_EXISTS");
+        return reject(400);
       }
-      return bcrypt.hash(req.body.password, 10);
+      return bcrypt.hash(password, 10);
     })
-    .then(hashedPassword => createUser(req.body.email, hashedPassword))
+    .then(hashedPassword => createUser(email, hashedPassword, username))
     .then(user => {
       req.logIn(user, err => {
         if (err) {
@@ -23,19 +30,16 @@ exports.signup = (req, res, next) => {
         return res.status(201).send();
       });
     })
-    .catch(authError(res, next));
+    .catch(next);
 };
 
 exports.login = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    if (info) {
-      return authError(res, next)(info);
-    }
     if (err) {
       return next(err);
     }
-    if (!user) {
-      return authError({ status: 400, error: "INVALID_CREDENTIALS" });
+    if (!user || info) {
+      return next(400);
     }
     req.logIn(user, err => {
       if (err) {

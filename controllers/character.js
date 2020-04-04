@@ -5,23 +5,22 @@ const {
   deleteCharacter
 } = require("../data/character");
 const { isAuthenticated } = require("../utils/helpers");
-const { error, notFoundError, badRequestError } = require("../utils/errors");
 
-exports.getCharacter = isAuthenticated(({ req, res, user }) => {
+exports.getCharacter = isAuthenticated((user, req, res, next) => {
   const id = R.path(["params", "id"])(req);
   const character = findCharacterById(user, id);
 
   if (!character) {
-    return notFoundError(res);
+    return next(400);
   }
   res.send(character);
 });
 
-exports.updateCharacter = isAuthenticated(({ req, res, user }) => {
+exports.updateCharacter = isAuthenticated((user, req, res, next) => {
   const { body: character, params } = R.pickAll(["body", "params"])(req);
 
   if (!character || R.isEmpty(character)) {
-    return badRequestError(res);
+    return next(400);
   }
 
   const { id } = params;
@@ -30,13 +29,13 @@ exports.updateCharacter = isAuthenticated(({ req, res, user }) => {
     .then(character => {
       res.send(character);
     })
-    .catch(error(res));
+    .catch(next);
 });
 
-exports.deleteCharacter = isAuthenticated(({ req, res, user }) => {
+exports.deleteCharacter = isAuthenticated((user, req, res) => {
   const id = R.path(["params", "id"])(req);
 
   deleteCharacter(user, id)
     .then(() => res.status(204).send())
-    .catch(error(res));
+    .catch(next);
 });

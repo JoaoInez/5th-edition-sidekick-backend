@@ -4,8 +4,8 @@ exports.findUserByEmail = email => User.findOne({ email }).exec();
 
 exports.findUserById = id => User.findById(id).exec();
 
-exports.createUser = (email, password) => {
-  const user = new User({ email, password });
+exports.createUser = (email, password, username) => {
+  const user = new User({ email, password, username });
   return user.save();
 };
 

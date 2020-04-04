@@ -4,11 +4,13 @@ const session = require("express-session");
 const redis = require("redis");
 const RedisStore = require("connect-redis")(session);
 const redisClient = redis.createClient();
-const passport = require("./passport");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const port = 3001;
+const cors = require("cors");
+const passport = require("./passport");
 const routes = require("./routes");
+const { errorHandler } = require("./utils/errorHandler");
+const port = 3001;
 
 const app = express();
 
@@ -30,7 +32,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(
+  cors({
+    origin: "http://localhost:3000"
+  })
+);
+
 app.use("/", routes);
+
+app.use(errorHandler);
 
 mongoose.connect("mongodb://localhost/fes", {
   useNewUrlParser: true,

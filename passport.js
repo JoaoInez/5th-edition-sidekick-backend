@@ -2,31 +2,31 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { findUserByEmail, findUserById } = require("./data/user");
-const { reject, passportError } = require("./utils/errors");
+const { reject } = require("./utils/errorHandler");
 
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
-    const invalidCredentials = {
-      status: 400,
-      error: "INVALID_CREDENTIALS"
-    };
-
     findUserByEmail(email)
       .then(user => {
         if (!user) {
-          return reject(...Object.values(invalidCredentials));
+          return reject(400);
         }
 
         return Promise.all([user, bcrypt.compare(password, user.password)]);
       })
       .then(([user, result]) => {
         if (!result) {
-          return done(null, false, invalidCredentials);
+          return done(null, false, { message: 400 });
         }
 
         return done(null, user);
       })
-      .catch(passportError(done));
+      .catch(err => {
+        if (err === 400) {
+          return done(null, false, { message: err });
+        }
+        done(err);
+      });
   })
 );
 
