@@ -15,15 +15,15 @@ exports.signup = (req, res, next) => {
   }
 
   findUserByEmail(email)
-    .then(user => {
+    .then((user) => {
       if (user) {
         return reject(400);
       }
       return bcrypt.hash(password, 10);
     })
-    .then(hashedPassword => createUser(email, hashedPassword, username))
-    .then(user => {
-      req.logIn(user, err => {
+    .then((hashedPassword) => createUser(email, hashedPassword, username))
+    .then((user) => {
+      req.logIn(user, (err) => {
         if (err) {
           return next(err);
         }
@@ -41,7 +41,7 @@ exports.login = (req, res, next) => {
     if (!user || info) {
       return next(400);
     }
-    req.logIn(user, err => {
+    req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }

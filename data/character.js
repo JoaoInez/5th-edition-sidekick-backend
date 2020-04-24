@@ -10,7 +10,7 @@ exports.findCharacterById = (user, id) => {
   const character = user.characters.id(id);
   return character
     ? character.toObject({
-        transform: omitId
+        transform: omitId,
       })
     : character;
 };
@@ -20,15 +20,15 @@ exports.updateCharacter = (userId, id, character) =>
     { _id: userId, "characters._id": id },
     {
       $set: {
-        "characters.$": { ...character, _id: id }
-      }
+        "characters.$": { ...character, _id: id },
+      },
     },
     { new: true, useFindAndModify: false }
   )
     .exec()
-    .then(user =>
+    .then((user) =>
       user.characters.id(id).toObject({
-        transform: omitId
+        transform: omitId,
       })
     )
     .catch(reject);

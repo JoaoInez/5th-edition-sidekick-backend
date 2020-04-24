@@ -2,7 +2,7 @@ const router = require("express").Router();
 const {
   getCharacter,
   updateCharacter,
-  deleteCharacter
+  deleteCharacter,
 } = require("../controllers/character");
 
 router.get("/:id", getCharacter);

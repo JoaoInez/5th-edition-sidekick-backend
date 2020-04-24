@@ -7,7 +7,7 @@ const { reject } = require("./utils/errorHandler");
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
     findUserByEmail(email)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return reject(400);
         }
@@ -21,7 +21,7 @@ passport.use(
 
         return done(null, user);
       })
-      .catch(err => {
+      .catch((err) => {
         if (err === 400) {
           return done(null, false, { message: err });
         }
@@ -34,10 +34,10 @@ passport.serializeUser(({ id }, done) => done(null, id));
 
 passport.deserializeUser((id, done) => {
   findUserById(id)
-    .then(user => {
+    .then((user) => {
       done(null, user);
     })
-    .catch(err => {
+    .catch((err) => {
       done(err, null);
     });
 });

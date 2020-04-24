@@ -7,10 +7,11 @@ const redisClient = redis.createClient();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 const passport = require("./passport");
 const routes = require("./routes");
 const { errorHandler } = require("./utils/errorHandler");
-const port = 3001;
+const port = process.env.PORT;
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use(
     store: new RedisStore({ client: redisClient }),
     secret: "secret",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
   })
 );
 
@@ -34,7 +35,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:3000"
+    origin: "http://localhost:3000",
   })
 );
 
@@ -42,9 +43,12 @@ app.use("/", routes);
 
 app.use(errorHandler);
 
-mongoose.connect("mongodb://localhost/fes", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@fes-98qn3.mongodb.net/test?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));

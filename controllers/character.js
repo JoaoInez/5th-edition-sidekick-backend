@@ -2,7 +2,7 @@ const R = require("ramda");
 const {
   findCharacterById,
   updateCharacter,
-  deleteCharacter
+  deleteCharacter,
 } = require("../data/character");
 const { isAuthenticated } = require("../utils/helpers");
 
@@ -26,7 +26,7 @@ exports.updateCharacter = isAuthenticated((user, req, res, next) => {
   const { id } = params;
 
   updateCharacter(user.id, id, character)
-    .then(character => {
+    .then((character) => {
       res.send(character);
     })
     .catch(next);

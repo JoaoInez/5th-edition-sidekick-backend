@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const statSchema = new mongoose.Schema(
   {
     value: { type: Number, default: 0 },
-    saveThrow: { type: Boolean, default: false }
+    saveThrow: { type: Boolean, default: false },
   },
   { _id: false }
 );
@@ -14,7 +14,7 @@ const characterSchema = new mongoose.Schema({
     charClass: { type: String, default: "" },
     level: { type: Number, default: 1 },
     race: { type: String, default: "" },
-    exp: { type: Number, default: 0 }
+    exp: { type: Number, default: 0 },
   },
   stats: {
     str: statSchema,
@@ -22,81 +22,81 @@ const characterSchema = new mongoose.Schema({
     con: statSchema,
     int: statSchema,
     wis: statSchema,
-    cha: statSchema
+    cha: statSchema,
   },
   skills: {
     acrobatics: {
       stat: { type: String, default: "dex" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     animalHandling: {
       stat: { type: String, default: "wis" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     arcana: {
       stat: { type: String, default: "int" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     athletics: {
       stat: { type: String, default: "str" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     deception: {
       stat: { type: String, default: "cha" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     history: {
       stat: { type: String, default: "int" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     insight: {
       stat: { type: String, default: "wis" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     intimidation: {
       stat: { type: String, default: "cha" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     investigation: {
       stat: { type: String, default: "int" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     medicine: {
       stat: { type: String, default: "wis" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     nature: {
       stat: { type: String, default: "int" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     perception: {
       stat: { type: String, default: "wis" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     performance: {
       stat: { type: String, default: "cha" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     persuasion: {
       stat: { type: String, default: "cha" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     religion: {
       stat: { type: String, default: "int" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     sleightOfHand: {
       stat: { type: String, default: "dex" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     stealth: {
       stat: { type: String, default: "dex" },
-      proficient: { type: Boolean, default: false }
+      proficient: { type: Boolean, default: false },
     },
     survival: {
       stat: { type: String, default: "wis" },
-      proficient: { type: Boolean, default: false }
-    }
+      proficient: { type: Boolean, default: false },
+    },
   },
   inspiration: { type: Boolean, default: false },
   combat: {
@@ -109,9 +109,9 @@ const characterSchema = new mongoose.Schema({
     hitDice: { type: String, default: "" },
     deathSaves: {
       successes: { type: Number, default: 0 },
-      failures: { type: Number, default: 0 }
-    }
-  }
+      failures: { type: Number, default: 0 },
+    },
+  },
 });
 
 module.exports = characterSchema;

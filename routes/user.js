@@ -2,7 +2,7 @@ const router = require("express").Router();
 const {
   createCharacter,
   getCharacters,
-  getCurrentUser
+  getCurrentUser,
 } = require("../controllers/user");
 
 router.post("/character", createCharacter);
