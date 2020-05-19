@@ -8,23 +8,15 @@ passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
     findUserByEmail(email)
       .then((user) => {
-        if (!user) {
-          return reject(400);
-        }
-
+        if (!user) return reject(400);
         return Promise.all([user, bcrypt.compare(password, user.password)]);
       })
       .then(([user, result]) => {
-        if (!result) {
-          return done(null, false, { message: 400 });
-        }
-
+        if (!result) return done(null, false, { message: 400 });
         return done(null, user);
       })
       .catch((err) => {
-        if (err === 400) {
-          return done(null, false, { message: err });
-        }
+        if (err === 400) return done(null, false, { message: err });
         done(err);
       });
   })

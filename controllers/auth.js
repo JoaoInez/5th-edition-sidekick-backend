@@ -10,23 +10,17 @@ exports.signup = (req, res, next) => {
     R.prop("body")
   )(req);
 
-  if (!email || !password || !username) {
-    return next(400);
-  }
+  if (!email || !password || !username) return next(400);
 
   findUserByEmail(email)
     .then((user) => {
-      if (user) {
-        return reject(400);
-      }
+      if (user) return reject(400);
       return bcrypt.hash(password, 10);
     })
     .then((hashedPassword) => createUser(email, hashedPassword, username))
     .then((user) => {
       req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
+        if (err) return next(err);
         return res.status(201).send();
       });
     })
@@ -35,16 +29,11 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user || info) {
-      return next(400);
-    }
+    if (err) return next(err);
+    if (!user || info) return next(400);
+
     req.logIn(user, (err) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       return res.status(204).send();
     });
   })(req, res, next);

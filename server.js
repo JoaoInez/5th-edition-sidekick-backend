@@ -35,7 +35,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CORS,
   })
 );
 
@@ -44,7 +44,7 @@ app.use("/", routes);
 app.use(errorHandler);
 
 mongoose.connect(
-  `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@fes-98qn3.mongodb.net/test?retryWrites=true&w=majority`,
+  `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@fes-98qn3.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

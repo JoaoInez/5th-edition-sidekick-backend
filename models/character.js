@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const Hashids = require("hashids");
+require("dotenv").config();
+const hashids = new Hashids(process.env.HASHIDS_SALT);
 
 const statSchema = new mongoose.Schema(
   {
@@ -9,6 +12,7 @@ const statSchema = new mongoose.Schema(
 );
 
 const characterSchema = new mongoose.Schema({
+  publicId: { type: String },
   info: {
     name: { type: String, default: "" },
     charClass: { type: String, default: "" },
@@ -112,6 +116,13 @@ const characterSchema = new mongoose.Schema({
       failures: { type: Number, default: 0 },
     },
   },
+});
+
+characterSchema.pre("save", function (next) {
+  if (!this.publicId) {
+    this.publicId = hashids.encodeHex(this.id);
+  }
+  next();
 });
 
 module.exports = characterSchema;

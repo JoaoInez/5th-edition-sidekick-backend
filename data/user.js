@@ -14,4 +14,5 @@ exports.createCharacter = (user) => {
   return user.save();
 };
 
-exports.getCharactersIds = (user) => user.characters.map((char) => char.id);
+exports.getCharactersIds = (user) =>
+  user.characters.map((char) => char.publicId);
